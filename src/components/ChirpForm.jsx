@@ -1,19 +1,17 @@
 import { useState } from "react";
-import { Card } from "./Card";
+import { v4 as uuidv4 } from 'uuid';
+import moment from "moment";
 
-const NewChirp = (props) => {
-    const [userName, setUserName] = useState('');
-    const [chirpText, setChirpText] = useState('');
+const ChirpForm = (props) => {
+    const [username, setUsername] = useState('');
+    const [message, setMessage] = useState('');
 
-    
-    
     const handleClick = (e) => {
         e.preventDefault();
-        props.liftUser(userName);
-        props.liftText(chirpText);
-        // const newCard = <Card key={userName} user={userName} text={chirpText} />
-        // console.log(newCard);
-    }
+        props.setChirps([{id: uuidv4(), name: username, message, time: moment().calendar().toString()}, ...props.chirps]);
+        setUsername('');
+        setMessage('');
+    };
     
     return(
         <div className= 'card bg-dark border border-1 border-light-50 m-1 shadow-lg'>
@@ -27,10 +25,10 @@ const NewChirp = (props) => {
                         <div className="card-title text-light">
                             <h5 className="m-0">
                                 <input 
-                                value={userName} 
+                                value={username} 
                                 className="bg-dark border-0 text-light" 
                                 placeholder="Enter your username"
-                                onChange={e => setUserName(e.target.value)} 
+                                onChange={e => setUsername(e.target.value)} 
                                 />
                             </h5>
                         </div>
@@ -39,14 +37,19 @@ const NewChirp = (props) => {
                     <div className="row g-3">
                         <div className="col-12 text-start input-group">
                             <textarea 
-                            value={chirpText} 
+                            value={message} 
                             className="form-control bg-dark text-light border-0 rows-3" 
                             placeholder="What's happening?"
-                            onChange={e => setChirpText(e.target.value)}
+                            rows= "3"
+                            onChange={e => setMessage(e.target.value)}
                             />
                         </div>
-                        <div className="col-2 justify-content-end">
-                            <button className="btn btn-light" onClick={handleClick}>Chirp</button>
+                        <div className="mt-3 d-flex justify-content-end">
+                            <button 
+                            className="btn btn-light" 
+                            onClick={handleClick}>
+                                Chirp
+                            </button>
                         </div>
                     </div>    
                 </form>
@@ -55,4 +58,4 @@ const NewChirp = (props) => {
     );
 }
 
-export default NewChirp;
+export default ChirpForm;
